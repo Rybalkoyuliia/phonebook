@@ -16,6 +16,7 @@ import {
   deleteContactThunk,
   fetchContactsThunk,
 } from '../../redux/phonebook/operations';
+import { toast } from 'react-toastify';
 
 const getContactList = (filter, contacts) => {
   if (!filter) {
@@ -24,7 +25,7 @@ const getContactList = (filter, contacts) => {
     return contacts.filter(
       contact =>
         contact.name.toLowerCase().includes(filter.toLowerCase()) ||
-        contact.phone.includes(filter)
+        contact.number.includes(filter)
     );
   }
 };
@@ -53,15 +54,16 @@ export const ContactList = () => {
   const contactList = getContactList(filter, contacts);
 
   const sortedContactsLength = [...contactList].filter(
-    item => formatPhoneNumber(item.phone).length === 13
+    item => formatPhoneNumber(item.number).length === 13
   );
 
   const sortedContactList = [...sortedContactsLength].sort((a, b) =>
     a.name.localeCompare(b.name)
   );
 
-  const handleDelete = id => {
+  const handleDelete = ({ id, name }) => {
     dispatch(deleteContactThunk(id));
+    toast.warning(`${name} was deleted from your contactlist`);
   };
 
   return (
@@ -77,12 +79,12 @@ export const ContactList = () => {
               <StyledContactName> {item.name}</StyledContactName>
               <StyledContactPhone>
                 {' '}
-                {formatPhoneNumber(item.phone)}
+                {formatPhoneNumber(item.number)}
               </StyledContactPhone>
             </StyledInfoWrapper>
             <StyledButton
               onClick={() => {
-                handleDelete(item.id);
+                handleDelete(item);
               }}
             >
               Delete

@@ -1,13 +1,14 @@
 import React from 'react';
 
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { StyledLabel, StyledSearchInput } from './SearchField.styled';
+import { filterContacts } from '../../redux/phonebook/slice';
 
 export const SearchField = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleChange = e => {
-    // dispatch(filterContacts(e.target.value.trim()));
+    dispatch(filterContacts(e.target.value.trim()));
   };
 
   return (

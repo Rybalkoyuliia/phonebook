@@ -1,26 +1,27 @@
 import React from 'react';
-
-import { ContactForm } from './ContactForm/ContactForm';
-import { ContactList } from './ContactList/ContactList';
-import { SearchField } from './SearchField/SearchField';
-
+import { Route, Routes } from 'react-router-dom';
+import Layout from './Layout/Layout';
 import {
-  StyledContactTitle,
-  StyledPhonebookTitle,
-  StyledPhonebookWrapper,
-  StyledSearchFieldWrapper,
-} from './App.styled';
+  RegisterPage,
+  PhonebookPage,
+  NotFound,
+  LoginPage,
+} from '../pages/index';
+import { ToastContainer } from 'react-toastify';
 
-export const App = () => {
+const App = () => {
   return (
-    <StyledPhonebookWrapper>
-      <StyledPhonebookTitle>My Phonebook</StyledPhonebookTitle>
-      <ContactForm />
-      <StyledSearchFieldWrapper>
-        <StyledContactTitle>Contacts</StyledContactTitle>
-        <SearchField />
-      </StyledSearchFieldWrapper>
-      <ContactList />
-    </StyledPhonebookWrapper>
+    <div>
+      <Routes>
+        <Route path="/" element={<Layout />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/contacts" element={<PhonebookPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <ToastContainer />
+    </div>
   );
 };
+
+export default App;

@@ -10,6 +10,7 @@ import {
 } from './ContactForm.styled';
 import { getContacts } from '../../redux/phonebook/slice';
 import { addContactThunk } from '../../redux/phonebook/operations';
+import { toast } from 'react-toastify';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
@@ -26,32 +27,32 @@ export const ContactForm = () => {
     const phoneRegex = /^\d{10}$/;
 
     if (!phoneRegex.test(addedPhone)) {
-      alert(
+      toast.error(
         'Invalid phone number format. Please follow the (000)000-0000 format without any letters or symbols.'
       );
       return;
     }
 
-    const newContact = { name, phone };
+    const newContact = { name, number: phone };
     const currentContacts = contactList || [];
 
     const existingContact = currentContacts.some(
       contact => contact.name === name
     );
     if (existingContact) {
-      alert(`${name} is already in contacts`);
+      toast.error(`${name} is already in contacts`);
       return;
     }
 
     const existingPhoneNumber = currentContacts.some(
-      contact => contact.phone === phone
+      contact => contact.number === phone
     );
     if (existingPhoneNumber) {
       const contactWithSameNumber = currentContacts.find(
-        contact => contact.phone === phone
+        contact => contact.number === phone
       );
       if (contactWithSameNumber) {
-        alert(
+        toast.error(
           `${phone} is already in contacts under the name ${contactWithSameNumber.name}`
         );
         return;
@@ -59,6 +60,7 @@ export const ContactForm = () => {
     }
 
     dispatch(addContactThunk(newContact));
+    toast.success(`${newContact.name} was added to your contactlist`);
 
     setName('');
     setPhone('');

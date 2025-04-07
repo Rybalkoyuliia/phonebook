@@ -10,6 +10,23 @@ export const StyledPhonebookWrapper = styled.div`
   width: 50%;
   margin: 50px auto;
   max-height: 750px;
+  position: relative;
+`;
+
+export const StyledExitButton = styled.button`
+  display: block;
+  position: absolute;
+  top: 50px;
+  right: 80px;
+  background-color: transparent;
+  color: white;
+  font-size: 34px;
+  border: none;
+  transition: transform 0.3s ease;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.3);
+  }
 `;
 
 export const StyledPhonebookTitle = styled.h1`
