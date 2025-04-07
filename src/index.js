@@ -8,7 +8,8 @@ import App from 'components/App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <BrowserRouter>
+    {/* <BrowserRouter> */}
+    <BrowserRouter basename="phonebook">
       <App />
     </BrowserRouter>
   </Provider>
