@@ -22,8 +22,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(refreshUserThunk());
-  }, [dispatch]);
+    if (isLoggedIn) {
+      dispatch(refreshUserThunk());
+    }
+  }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
     if (isLoggedIn) {
