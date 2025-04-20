@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 const shake = keyframes`
@@ -44,7 +45,7 @@ export const Text = styled.p`
   margin: 5px 0 20px;
 `;
 
-export const BackButton = styled.a`
+export const BackButton = styled(Link)`
   display: inline-block;
   padding: 10px 20px;
   background-color: rgb(253, 135, 6);

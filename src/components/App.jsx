@@ -12,14 +12,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { refreshUserThunk } from '../redux/auth/operations';
 import PrivatRoute from '../routes/PrivatRoute';
 import PublicRoute from '../routes/PublicRoute';
-import { selectIsLoggedIn, selectIsRefreshing } from '../redux/auth/slice';
+import {
+  selectIsLoggedIn,
+  selectIsRefreshing,
+  selectToken,
+} from '../redux/auth/slice';
 import Loader from './Loader/Loader';
 import { fetchContactsThunk } from '../redux/phonebook/operations';
 
 const App = () => {
   const isRefresh = useSelector(selectIsRefreshing);
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const token = useSelector(selectToken);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) {
+      dispatch(refreshUserThunk());
+    }
+  }, [dispatch, token]);
 
   useEffect(() => {
     if (isLoggedIn) {

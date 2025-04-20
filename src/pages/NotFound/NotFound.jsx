@@ -7,8 +7,12 @@ import {
   Title,
   Wrapper,
 } from './NotFound.styled';
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../../redux/auth/slice';
 
 export const NotFound = () => {
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
   return (
     <Wrapper>
       <Icon viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,8 +31,10 @@ export const NotFound = () => {
       </Icon>
       <Title>404</Title>
       <SubTitle>Oops, contact not found!</SubTitle>
-      <Text>Looks like you dialed the wrong number... or URL.</Text>
-      <BackButton href="/phonebook">Go back home</BackButton>
+      <Text>Looks like you dialed the wrong URL.</Text>
+      <BackButton to={isLoggedIn ? '/contacts' : '/login'}>
+        Go back home
+      </BackButton>
     </Wrapper>
   );
 };

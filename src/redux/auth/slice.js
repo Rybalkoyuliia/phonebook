@@ -27,12 +27,12 @@ const slice = createSlice({
     selectIsLoggedIn: state => state.isLoggedIn,
     selectIsRefreshing: state => state.isRefreshing,
     selectIsLoading: state => state.isLoading,
+    selectToken: state => state.token,
   },
   extraReducers: builder =>
     builder
       .addCase(logoutUserThunk.pending, (state, { payload }) => {
         state.isLoading = true;
-        // state.isLoggedIn = true;
         state.error = null;
       })
       .addCase(logoutUserThunk.fulfilled, state => {
@@ -89,5 +89,9 @@ const slice = createSlice({
 });
 
 export const authReducer = slice.reducer;
-export const { selectIsLoggedIn, selectIsRefreshing, selectIsLoading } =
-  slice.selectors;
+export const {
+  selectIsLoggedIn,
+  selectIsRefreshing,
+  selectIsLoading,
+  selectToken,
+} = slice.selectors;
