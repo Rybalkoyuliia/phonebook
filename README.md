@@ -66,20 +66,23 @@ npm start
 
 ```pgsql
  src/
+├── assets/
+├── axiosConfig/
 ├── components/
+├── hooks/
+├── iconsReact/
 ├── pages/
 ├── redux/
 │   ├── auth/
 │   ├── phonebook/
 │   └── store.js
-├── styles/
-├── utils/
-├── App.jsx
+├── routes/
+├── schemas/
+├── index.css
 ├── index.js
-└── index.css
 ```
 
-##Usage
+## Usage
 
 - **Login:** User must log in to access the phonebook features.
 
