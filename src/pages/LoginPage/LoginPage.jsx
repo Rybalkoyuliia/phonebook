@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { loginUserThunk } from '../../redux/auth/operations';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { loginSchema } from 'schemas/loginSchema';
 
 export const LoginPage = () => {
   const dispatch = useDispatch();
@@ -13,12 +14,11 @@ export const LoginPage = () => {
       .unwrap()
       .then(data => {
         toast.success(`Welcome, ${data.user.name}`);
-        navigate('/contacts');
+        navigate('/contacts', { replace: true });
       })
       .catch(error => {
-        console.log(error);
         toast.error(`${error}`);
       });
   };
-  return <Form formType="login" submitData={submitData} />;
+  return <Form formType="login" submitData={submitData} schema={loginSchema} />;
 };

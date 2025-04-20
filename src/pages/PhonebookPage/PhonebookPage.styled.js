@@ -8,9 +8,11 @@ export const StyledPhonebookWrapper = styled.div`
   padding: 40px 80px;
   border-radius: 20px;
   width: 50%;
-  margin: 50px auto;
-  max-height: 750px;
-  position: relative;
+  height: 80%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export const StyledExitButton = styled.button`

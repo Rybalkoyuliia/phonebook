@@ -13,19 +13,20 @@ export const StyledModalWrapper = styled.div`
   height: 100%;
 `;
 
-export const StyledBlurredBackground = styled.div``;
-
 export const StyledModalContent = styled.div`
   background-color: #fff;
-  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
   max-width: 500px;
   border-radius: 8px;
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
 `;
+
 export const StyledCloseBtn = styled.span`
   color: #aaa;
   float: right;

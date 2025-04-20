@@ -13,10 +13,16 @@ import { ContactList } from 'components/ContactList/ContactList';
 import Modal from 'components/Modal/Modal';
 import { useModal } from 'hooks/useModal';
 import CloseAccountContent from 'components/CloseAccountContent/CloseAccountContent';
+import { useSelector } from 'react-redux';
+import { selectIsLoading } from '../../redux/auth/slice';
+import Loader from 'components/Loader/Loader';
 
 export const PhonebookPage = () => {
   const { isOpen, open, close } = useModal();
-  return (
+  const isLoading = useSelector(selectIsLoading);
+  return isLoading ? (
+    <Loader />
+  ) : (
     <StyledPhonebookWrapper>
       <StyledPhonebookTitle>My Phonebook</StyledPhonebookTitle>
       <StyledExitButton

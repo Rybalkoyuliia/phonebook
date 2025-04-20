@@ -6,6 +6,9 @@ export const StyledContactList = styled.ul`
   gap: 5px;
   max-height: fit-content;
   overflow-y: auto;
+  div {
+    max-height: 90%;
+  }
   &::-webkit-scrollbar {
     width: 5px;
     height: 15px;
@@ -56,11 +59,15 @@ export const StyledButton = styled.button`
   height: 20px;
   border: 2px solid rgb(253, 135, 6);
   color: rgb(253, 135, 6);
+  font-size: 18px;
+  transition: transform 0.3s ease;
+
   &:hover {
     background-color: orange;
     color: white;
     cursor: pointer;
     border: 2px solid orange;
+    transform: scale(1.3);
   }
 `;
 
@@ -68,4 +75,10 @@ export const StyledEmptyIdentificatorMessage = styled.p`
   color: white;
   font-size: 24px;
   font-weight: bold;
+  text-align: center;
+`;
+
+export const StyledButtonsList = styled.div`
+  display: flex;
+  gap: 10px;
 `;

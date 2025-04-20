@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { filterValue, getContacts } from '../../redux/phonebook/slice';
+import { selectFilterValue, selectContacts } from '../../redux/phonebook/slice';
 
 import {
   StyledButton,
+  StyledButtonsList,
   StyledContactList,
   StyledContactListItem,
   StyledContactName,
@@ -12,10 +13,19 @@ import {
   StyledEmptyIdentificatorMessage,
   StyledInfoWrapper,
 } from './ContactList.styled';
+import { selectLoading } from '../../redux/phonebook/slice';
+import Loader from 'components/Loader/Loader';
+import EmptyContactList from 'components/EmptyContactList/EmptyContactList';
+import DeleteIcon from 'iconsReact/DeleteIcon';
+import EditIcon from 'iconsReact/EditIcon';
+import { useModal } from 'hooks/useModal';
+import Modal from 'components/Modal/Modal';
+import DeleteContactContent from 'components/DeleteContactContent/DeleteContactContent';
 import {
   deleteContactThunk,
-  fetchContactsThunk,
+  editContactThunk,
 } from '../../redux/phonebook/operations';
+import EditContactContent from 'components/EditContacContent/EditContactContent';
 import { toast } from 'react-toastify';
 
 const getContactList = (filter, contacts) => {
@@ -30,68 +40,97 @@ const getContactList = (filter, contacts) => {
   }
 };
 
-const formatPhoneNumber = phoneNumber => {
-  const cleaned = phoneNumber.replace(/[^\d]/g, '').replace(/^1/, '');
-
-  const formatted = `(${cleaned.slice(0, 3)})${cleaned.slice(
-    3,
-    6
-  )}-${cleaned.slice(6)}`;
-
-  return formatted;
-};
-
 export const ContactList = () => {
+  const { isOpen, open, close } = useModal();
+  const [contactData, setContactData] = useState(null);
+  const [buttonType, setButtonType] = useState(null);
+
+  const loading = useSelector(selectLoading);
+
+  const filter = useSelector(selectFilterValue);
+  const contacts = useSelector(selectContacts) || [];
+
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchContactsThunk());
-  }, [dispatch]);
-
-  const filter = useSelector(filterValue);
-  const contacts = useSelector(getContacts);
+  const handleDelete = userId => {
+    dispatch(deleteContactThunk(userId));
+    close();
+  };
+  const handleEdit = contact => {
+    if (!loading) {
+      dispatch(editContactThunk(contact));
+      toast.success(`${contact.name} was successfully changed`);
+      close();
+    }
+  };
 
   const contactList = getContactList(filter, contacts);
 
-  const sortedContactsLength = [...contactList].filter(
-    item => formatPhoneNumber(item.number).length === 13
-  );
+  const sortedContactList = useMemo(() => {
+    return [...contactList].sort((a, b) => a.name.localeCompare(b.name));
+  }, [contactList]);
 
-  const sortedContactList = [...sortedContactsLength].sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
+  if (loading) {
+    return <Loader />;
+  }
 
-  const handleDelete = ({ id, name }) => {
-    dispatch(deleteContactThunk(id));
-    toast.warning(`${name} was deleted from your contactlist`);
-  };
-
-  return (
-    <StyledContactList>
-      {!sortedContactList?.length ? (
-        <StyledEmptyIdentificatorMessage>
-          Currently, no contacts in your list
-        </StyledEmptyIdentificatorMessage>
-      ) : (
-        sortedContactList.map(item => (
+  return !sortedContactList?.length ? (
+    <>
+      <StyledEmptyIdentificatorMessage>
+        Currently, no contacts in your list
+      </StyledEmptyIdentificatorMessage>
+      <EmptyContactList />
+    </>
+  ) : (
+    <>
+      <StyledContactList>
+        {sortedContactList?.map(item => (
           <StyledContactListItem key={item.id}>
             <StyledInfoWrapper>
-              <StyledContactName> {item.name}</StyledContactName>
-              <StyledContactPhone>
-                {' '}
-                {formatPhoneNumber(item.number)}
-              </StyledContactPhone>
+              <StyledContactName>{item.name}</StyledContactName>
+              <StyledContactPhone>{item.number}</StyledContactPhone>
             </StyledInfoWrapper>
-            <StyledButton
-              onClick={() => {
-                handleDelete(item);
-              }}
-            >
-              Delete
-            </StyledButton>
+            <StyledButtonsList>
+              <StyledButton
+                onClick={() => {
+                  open();
+                  setContactData(item);
+                  setButtonType('EDIT');
+                }}
+              >
+                <EditIcon />
+              </StyledButton>
+              <StyledButton
+                onClick={() => {
+                  open();
+                  setContactData(item);
+                  setButtonType('DELETE');
+                }}
+              >
+                <DeleteIcon />
+              </StyledButton>
+            </StyledButtonsList>
           </StyledContactListItem>
-        ))
+        ))}
+      </StyledContactList>
+      {isOpen && (
+        <Modal closeModal={close}>
+          {buttonType === 'DELETE' && (
+            <DeleteContactContent
+              id={contactData.id}
+              onConfirm={handleDelete}
+              closeModal={close}
+            />
+          )}
+          {buttonType === 'EDIT' && (
+            <EditContactContent
+              onChangeContact={handleEdit}
+              contactData={contactData}
+              id={contactData.id}
+            />
+          )}
+        </Modal>
       )}
-    </StyledContactList>
+    </>
   );
 };

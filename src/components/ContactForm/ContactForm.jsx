@@ -8,13 +8,13 @@ import {
   StyledInputsWrapper,
   StyledLabel,
 } from './ContactForm.styled';
-import { getContacts } from '../../redux/phonebook/slice';
+import { selectContacts } from '../../redux/phonebook/slice';
 import { addContactThunk } from '../../redux/phonebook/operations';
 import { toast } from 'react-toastify';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contactList = useSelector(getContacts);
+  const contactList = useSelector(selectContacts);
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
